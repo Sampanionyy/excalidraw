@@ -14,6 +14,8 @@ import {
   actionToggleMidpointSnapping,
   actionToggleObjectsSnapMode,
   actionToggleSearchMenu,
+  actionToggleShowHints,
+  actionToggleMinimap,
   actionToggleStats,
   actionToggleTheme,
   actionToggleZenMode,
@@ -563,6 +565,23 @@ const PreferencesToggleMidpointSnappingItem = () => {
   );
 };
 
+const PreferencesToggleShowHintsItem = () => {
+  const { t } = useI18n();
+  const actionManager = useExcalidrawActionManager();
+  const appState = useUIAppState();
+  return (
+    <DropdownMenuItemCheckbox
+      checked={appState.showHints}
+      onSelect={(event) => {
+        actionManager.executeAction(actionToggleShowHints);
+        event.preventDefault();
+      }}
+    >
+      {t("labels.showHints")}
+    </DropdownMenuItemCheckbox>
+  );
+};
+
 export const PreferencesToggleGridModeItem = () => {
   const { t } = useI18n();
   const actionManager = useExcalidrawActionManager();
@@ -621,6 +640,26 @@ const PreferencesToggleViewModeItem = () => {
   );
 };
 
+const PreferencesToggleMinimapItem = () => {
+  const { t } = useI18n();
+  const actionManager = useExcalidrawActionManager();
+  const appState = useUIAppState();
+  if (!actionManager.isActionEnabled(actionToggleMinimap)) {
+    return null;
+  }
+  return (
+    <DropdownMenuItemCheckbox
+      checked={appState.minimapEnabled}
+      onSelect={(event) => {
+        actionManager.executeAction(actionToggleMinimap);
+        event.preventDefault();
+      }}
+    >
+      {t("labels.minimap")}
+    </DropdownMenuItemCheckbox>
+  );
+};
+
 const PreferencesToggleElementPropertiesItem = () => {
   const { t } = useI18n();
   const actionManager = useExcalidrawActionManager();
@@ -662,9 +701,11 @@ export const Preferences = ({
             <PreferencesToggleGridModeItem />
             <PreferencesToggleZenModeItem />
             <PreferencesToggleViewModeItem />
+            <PreferencesToggleMinimapItem />
             <PreferencesToggleElementPropertiesItem />
             <PreferencesToggleArrowBindingItem />
             <PreferencesToggleMidpointSnappingItem />
+            <PreferencesToggleShowHintsItem />
           </>
         )}
         {additionalItems}
@@ -679,9 +720,11 @@ Preferences.InputDevice = PreferencesInputDeviceItem;
 Preferences.ToggleSnapMode = PreferencesToggleSnapModeItem;
 Preferences.ToggleArrowBinding = PreferencesToggleArrowBindingItem;
 Preferences.ToggleMidpointSnapping = PreferencesToggleMidpointSnappingItem;
+Preferences.ToggleShowHints = PreferencesToggleShowHintsItem;
 Preferences.ToggleGridMode = PreferencesToggleGridModeItem;
 Preferences.ToggleZenMode = PreferencesToggleZenModeItem;
 Preferences.ToggleViewMode = PreferencesToggleViewModeItem;
+Preferences.ToggleMinimap = PreferencesToggleMinimapItem;
 Preferences.ToggleElementProperties = PreferencesToggleElementPropertiesItem;
 
 Preferences.displayName = "Preferences";
